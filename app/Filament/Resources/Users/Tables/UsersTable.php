@@ -32,6 +32,11 @@ class UsersTable
                     })
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('department.name')
+                    ->label('Department')
+                    ->searchable()
+                    ->sortable()
+                    ->default('—'),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable()

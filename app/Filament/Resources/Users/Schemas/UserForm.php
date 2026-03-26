@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Models\Department;
+use App\Models\User;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -31,6 +33,12 @@ class UserForm
                     ])
                     ->required()
                     ->default('employee')
+                    ->native(false),
+                Select::make('department_id')
+                    ->label('Department')
+                    ->options(Department::pluck('name', 'id'))
+                    ->searchable()
+                    ->nullable()
                     ->native(false),
                 TextInput::make('password')
                     ->password()
