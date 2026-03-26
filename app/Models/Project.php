@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $fillable = ['name', 'task', 'activity', 'client'];
+    protected $fillable = [
+        'id',
+        'name',
+        'task',
+        'activity',
+        'employee'
+    ];
 }

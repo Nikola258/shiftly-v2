@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('task');
             $table->string('activity');
-            $table->string('client');
+            $table->string('employee');
             $table->timestamps();
         });
     }

@@ -42,8 +42,8 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255),
 
-                TextInput::make('client')
-                    ->label('Client')
+                TextInput::make('employee')
+                    ->label('Employee')
                     ->required()
                     ->maxLength(255),
             ]);
