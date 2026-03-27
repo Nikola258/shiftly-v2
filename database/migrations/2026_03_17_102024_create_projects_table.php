@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('task');
-            $table->string('activity');
-            $table->string('employee');
+            $table->foreignId('employee')->constrained('users')->onDelete('cascade');
+            $table->boolean('activity')->default(true);
             $table->timestamps();
         });
     }
