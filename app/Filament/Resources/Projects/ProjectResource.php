@@ -6,12 +6,16 @@ use App\Filament\Resources\Projects\Pages\CreateProject;
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Projects\Pages\ListProjects;
 use App\Models\Project;
+use App\Models\User;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -32,20 +36,35 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255),
 
-                TextInput::make('task')
+                Select::make('task')
                     ->label('Task')
-                    ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'recruitment' => 'Recruitment',
+                        'onboarding' => 'Onboarding',
+                        'training' => 'Training & Development',
+                        'performance_review' => 'Performance Review',
+                        'payroll' => 'Payroll Processing',
+                        'benefits_admin' => 'Benefits Administration',
+                        'employee_relations' => 'Employee Relations',
+                        'compliance' => 'Compliance & Policy',
+                        'offboarding' => 'Offboarding',
+                        'attendance' => 'Attendance Management',
+                        'leave_management' => 'Leave Management',
+                        'documentation' => 'Documentation',
+                        'other' => 'Other',
+                    ])
+                    ->searchable()
+                    ->required(),
 
-                TextInput::make('activity')
-                    ->label('Activity')
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('employee')
+                Select::make('employee')
                     ->label('Employee')
-                    ->required()
-                    ->maxLength(255),
+                    ->options(User::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
+
+                Toggle::make('activity')
+                    ->label('Active')
+                    ->default(true),
             ]);
     }
 
@@ -53,11 +72,18 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Project Name')->sortable(),
-                TextColumn::make('task')->sortable(),
-                TextColumn::make('activity')->sortable(),
-                TextColumn::make('client')->sortable(),
-                TextColumn::make('created_at')->label('Created At')->dateTime()->sortable(),
+                TextColumn::make('name')->label('Project Name')->sortable()->searchable(),
+                TextColumn::make('task')->sortable()->searchable(),
+                TextColumn::make('employee')
+                    ->formatStateUsing(fn ($state) => User::find($state)?->name ?? 'N/A')
+                    ->sortable(),
+                IconColumn::make('activity')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
+                TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->actions([
                 EditAction::make(),
